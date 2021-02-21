@@ -20,7 +20,6 @@ const App = () => {
     setLinkedWords(linkedWordItems);
   };
 
-  console.log(linkedWords);
   return (
     <div className="App">
       <button onClick={handleWordLinking}>LINK WORDS</button>
@@ -44,7 +43,7 @@ const App = () => {
                 charToLink={wordItem.charToLink}
                 isVertical={wordItem.isVertical}
                 index={index}
-                noLink={!wordItem.wordToLink}
+                noLink={!wordItem.wordToLink && !linkedWords.some((word) => word.wordToLink === wordItem.word)}
                 words={linkedWords}
               />
             )
