@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Word from './components/Word';
 import { WORDS } from './constants/constants';
-import { mapLinkedWords, mapOrientationOfWords } from './helpers/linkWords';
+import { getIsWordVertical, mapLinkedWords, mapOrientationOfWords } from './helpers/helpers';
 
 const App = () => {
   const [linkedWords, setLinkedWords] = useState([]);
@@ -20,6 +20,7 @@ const App = () => {
     setLinkedWords(linkedWordItems);
   };
 
+  console.log(linkedWords);
   return (
     <div className="App">
       <button onClick={handleWordLinking}>LINK WORDS</button>
@@ -41,7 +42,7 @@ const App = () => {
                 word={wordItem.word}
                 wordToLink={wordItem.wordToLink}
                 charToLink={wordItem.charToLink}
-                isVertical={wordItem.isVertical}
+                isVertical={getIsWordVertical(wordItem, linkedWords)}
                 index={index}
                 noLink={!wordItem.wordToLink && !linkedWords.some((word) => word.wordToLink === wordItem.word)}
                 words={linkedWords}
