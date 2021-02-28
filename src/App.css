@@ -35,3 +35,19 @@
   top: 0;
   left: 0;
 }
+
+.link-button {
+  padding: 8px 12px;
+  background-color: orange;
+  border: none;
+  margin: 10px 0;
+  color: white;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .1s;
+}
+
+.link-button:hover {
+  transform: scale(1.05);
+}
