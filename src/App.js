@@ -1,54 +1,115 @@
 import React, { useState } from 'react';
-import './App.css';
 import Word from './components/Word';
-import { WORDS } from './constants/constants';
-import { getIsWordVertical, mapLinkedWords, mapOrientationOfWords } from './helpers/helpers';
+import { CHAR_WIDTH, START_AXES, WORDS } from './constants/constants';
+
+import './App.css';
 
 const App = () => {
-  const [linkedWords, setLinkedWords] = useState([]);
+  const [isGenerated, generateCrossword] = useState(false);
 
-  const handleWordLinking = () => {
-    const linkedWordItems = WORDS
-      .map(mapLinkedWords)
-      .map(mapOrientationOfWords);
+  const renderWordsOntoCrosswords = (words) => {
+    let isVertical = true;
+    let displayedWords = [];
+    let startY = START_AXES;
+    let startX = START_AXES;
 
-    linkedWordItems.forEach((wordItem) => {
-      if (wordItem.wordToLink) {
-        linkedWordItems.splice(WORDS.indexOf(wordItem.wordToLink), 0, linkedWordItems.splice(WORDS.indexOf(wordItem.word), 1)[0]);
+    //DETERMINE THE NEXT X, Y AXES TO DISPLAY WORD
+    const returnDisplayProperties = ({ oldWordCharIndex, newCharIndex }, displayedWord) => {
+      const { isVertical } = displayedWord;
+
+      const newCharIndexPixels = newCharIndex * CHAR_WIDTH;
+      const oldCharIndexPixels = oldWordCharIndex * CHAR_WIDTH;
+      console.log(oldCharIndexPixels, newCharIndexPixels)
+
+      return {
+        isVertical: isVertical ? false : true,
+        startY: isVertical ? displayedWord.startY + oldCharIndexPixels : displayedWord.startY + newCharIndexPixels,
+        startX: isVertical ? displayedWord.startX - newCharIndexPixels : displayedWord.startX - oldCharIndexPixels
       }
-    });
-    setLinkedWords(linkedWordItems);
+    };
+
+    //FIND THE INDEX OF THE WORD TO INTERSECT ---> FIND THE INDEXES OF CHARACTERS THAT INTERSECT
+    const returnIntersectionProperties = (word) => {
+      let newCharIndex;
+      let oldWordCharIndex;
+
+      const wordChars = displayedWords.map((item) => [...item.word]);
+      console.log(wordChars);
+
+      //DETERMINE INTERSECTION INDEXES OF WORD AND CHARACTERS
+      const newWordIndex = displayedWords
+      .map((item) => [...item.word])
+      .findIndex((charArray) => {
+        const isCharacterInWord = charArray.some((char, index) => {
+          if (word.includes(char)) {
+            console.log('-->', charArray, char, word);
+            oldWordCharIndex = index;
+            newCharIndex = word.indexOf(char);
+          }
+
+          return word.includes(char);
+        });
+
+        return isCharacterInWord;
+      });
+      console.log(newWordIndex);
+
+      return {
+        newWordIndex: newWordIndex,
+        newCharIndex: newCharIndex,
+        oldWordCharIndex: oldWordCharIndex
+      };
+    };
+
+    //MAP WORDS AND ADD DISPLAYED WORDS INTO SEPARATE ARRAY
+    const mapWordsOntoCrosswords = (word, index) => {
+      if (displayedWords.length === 0) {
+        //DISPLAY FIRST WORD
+        displayedWords = [...displayedWords, { word: word, isVertical: isVertical, startY: startY, startX: startX }];
+      } else {
+        const intersectionProps = returnIntersectionProperties(word);
+        const displayProps = returnDisplayProperties(intersectionProps, displayedWords[intersectionProps.newWordIndex]);
+        displayedWords = [...displayedWords, {
+          word: word, 
+          ...displayProps
+        }];
+        startY = `${displayProps.startY}px`;
+        startX = `${displayProps.startX}px`;
+        //find word that can intersect with displayed word
+        isVertical = false;
+      };
+
+      console.log(startX);
+      console.log(startY)
+  
+      return (
+        <Word
+          startY={startY}
+          startX={startX}
+          word={word}
+          isVertical={isVertical}
+          index={index}
+        />
+      );
+    };
+
+    return words.map(mapWordsOntoCrosswords);
   };
 
-  console.log(linkedWords);
   return (
     <div className="App">
-      <button onClick={handleWordLinking}>LINK WORDS</button>
-      {linkedWords.length === 0 && 
+      <button onClick={() => generateCrossword(true)}>LINK WORDS</button>
+      {!isGenerated && 
         <div style={{ width: 'fit-content', margin: 'auto' }}>
-          {WORDS.map((word, index) => {
-            return (
-              <Word word={word} isVertical={index % 2 === 0} />
-            )
-          })}
+          {WORDS.map((word, index) => (
+            <Word word={word} isVertical={index % 2 === 0} />
+          ))}
         </div>
       }
 
-      {linkedWords.length !== 0 && 
-        <div style={{ width: 'fit-content', margin: 'auto' }}>
-          {linkedWords.map((wordItem, index) => {
-            return (
-              <Word
-                word={wordItem.word}
-                wordToLink={wordItem.wordToLink}
-                charToLink={wordItem.charToLink}
-                isVertical={getIsWordVertical(wordItem, linkedWords)}
-                index={index}
-                noLink={!wordItem.wordToLink && !linkedWords.some((word) => word.wordToLink === wordItem.word)}
-                words={linkedWords}
-              />
-            )
-          })}
+      {isGenerated && 
+        <div style={{ width: 'fit-content', margin: 'auto', height: '500px' }}>
+          {renderWordsOntoCrosswords(WORDS.slice(0, 4))}
         </div>
       }
     </div>
