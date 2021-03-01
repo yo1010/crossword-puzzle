@@ -1,11 +1,11 @@
 import Word from "../components/Word";
-import { CHAR_WIDTH, START_AXES } from "../constants/constants";
+import { CHAR_WIDTH, START_AXES_Y, START_AXES_X } from "../constants/constants";
 
 const generateCrossword = (words) => {
     let isVertical = true;
     let displayedWords = [];
-    let startY = START_AXES;
-    let startX = START_AXES;
+    let startY = START_AXES_Y;
+    let startX = START_AXES_X;
 
     const updateUnavailableCharIndexes = (intersectionProps) => {
         displayedWords[intersectionProps.displayedWordIndex] = {
