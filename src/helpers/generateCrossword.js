@@ -18,7 +18,7 @@ const generateCrossword = (words) => {
     };
 
     //DETERMINE THE NEXT X, Y AXES TO DISPLAY WORD
-    const returnDisplayProperties = ({ displayedCharIndex, newCharIndex }, displayedWord) => {
+    const getDisplayProps = ({ displayedCharIndex, newCharIndex }, displayedWord) => {
         const { isVertical } = displayedWord;
 
         const newCharIndexPixels = newCharIndex * CHAR_WIDTH;
@@ -33,7 +33,7 @@ const generateCrossword = (words) => {
     };
 
     //FIND THE INDEX OF THE WORD TO INTERSECT ---> FIND THE INDEXES OF CHARACTERS THAT INTERSECT
-    const returnIntersectionProperties = (word) => {
+    const getIntersectionProps = (word) => {
         let newCharIndex;
         let displayedCharIndex;
 
@@ -98,9 +98,9 @@ const generateCrossword = (words) => {
             }];
         } else {
             //DETERMINE INTERSECTION + DISPLAY PROPS FOR NEXT ITEMS
-            const intersectionProps = returnIntersectionProperties(word);
+            const intersectionProps = getIntersectionProps(word);
             console.log('map next details', intersectionProps, word, displayedWords[intersectionProps.displayedWordIndex])
-            const displayProps = returnDisplayProperties(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]);
+            const displayProps = getDisplayProps(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]);
 
             displayedWords = [...displayedWords, {
             word: word,
