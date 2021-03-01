@@ -43,37 +43,37 @@ const generateCrossword = (words) => {
         //DETERMINE INTERSECTION INDEXES OF WORD AND CHARACTERS
         const displayedWordIndex = displayedWords
             .map((item) => {
-            //MAP ITEMS AND HANDLE ALREADY INTERSECTED CHARACTERS
-            console.log(item)
-            const { unavailableCharIndexes, word } = item;
-            if (unavailableCharIndexes.length > 0) {
-                const availableChars = [...word].map((char, index) => {
-                if (unavailableCharIndexes.includes(index)) {
-                    return null;
+                //MAP ITEMS AND HANDLE ALREADY INTERSECTED CHARACTERS
+                console.log(item)
+                const { unavailableCharIndexes, word } = item;
+                if (unavailableCharIndexes.length > 0) {
+                    const availableChars = [...word].map((char, index) => {
+                    if (unavailableCharIndexes.includes(index)) {
+                        return null;
+                    }
+
+                    return char;
+                    });
+
+                    return availableChars;
                 }
 
-                return char;
-                });
-
-                return availableChars;
-            }
-
-            return [...word]
+                return [...word]
             })
             .findIndex((charArray) => {
-            //FIND DISPLAYED WORD TO INTERSECT WITH AND THE CHARACTERS THAT INTERSECT
-            console.log(charArray)
-            const isCharacterInWord = charArray.some((char, index) => {
-                if (word.includes(char)) {
-                console.log('-->', charArray, char, word);
-                displayedCharIndex = index;
-                newCharIndex = word.indexOf(char);
-                }
+                //FIND DISPLAYED WORD TO INTERSECT WITH AND THE CHARACTERS THAT INTERSECT
+                console.log(charArray)
+                const isCharacterInWord = charArray.some((char, index) => {
+                    if (word.includes(char)) {
+                        console.log('-->', charArray, char, word);
+                        displayedCharIndex = index;
+                        newCharIndex = word.indexOf(char);
+                    }
 
-                return word.includes(char);
-            });
+                    return word.includes(char);
+                });
 
-            return isCharacterInWord;
+                return isCharacterInWord;
             });
 
         console.log(displayedWordIndex);
@@ -90,11 +90,11 @@ const generateCrossword = (words) => {
         if (displayedWords.length === 0) {
             //DISPLAY FIRST WORD
             displayedWords = [...displayedWords, {
-            word: word,
-            isVertical: isVertical,
-            startY: startY,
-            startX: startX,
-            unavailableCharIndexes: [] 
+                word: word,
+                isVertical: isVertical,
+                startY: startY,
+                startX: startX,
+                unavailableCharIndexes: [] 
             }];
         } else {
             //DETERMINE INTERSECTION + DISPLAY PROPS FOR NEXT ITEMS
@@ -103,9 +103,9 @@ const generateCrossword = (words) => {
             const displayProps = getDisplayProps(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]);
 
             displayedWords = [...displayedWords, {
-            word: word,
-            unavailableCharIndexes: [intersectionProps.newCharIndex],
-            ...displayProps
+                word: word,
+                unavailableCharIndexes: [intersectionProps.newCharIndex],
+                ...displayProps
             }];
 
             updateUnavailableCharIndexes(intersectionProps);
