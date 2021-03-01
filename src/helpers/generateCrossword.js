@@ -48,11 +48,11 @@ const generateCrossword = (words) => {
                 const { unavailableCharIndexes, word } = item;
                 if (unavailableCharIndexes.length > 0) {
                     const availableChars = [...word].map((char, index) => {
-                    if (unavailableCharIndexes.includes(index)) {
-                        return null;
-                    }
+                        if (unavailableCharIndexes.includes(index)) {
+                            return null;
+                        }
 
-                    return char;
+                        return char;
                     });
 
                     return availableChars;
