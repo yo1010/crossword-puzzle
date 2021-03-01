@@ -4,6 +4,8 @@ import { CHAR_WIDTH, START_AXES, WORDS } from './constants/constants';
 
 import './App.css';
 
+//NEED TO ADD INPUT FOR WORDS
+
 //NEED TO HANDLE WORDS THAT DON'T LINK
 
 //NEED TO HANDLE OVERLAPPING
