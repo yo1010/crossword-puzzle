@@ -20,3 +20,19 @@ export const mapWordCharacters = (displayedWord) => {
 
     return [...word]
 };
+
+export const updateUnavailableCharIndexes = (intersectionProps, displayedWords) => {
+    return displayedWords.map((word, index) => {
+        if (index === intersectionProps.displayedWordIndex) {
+            return {
+                ...displayedWords[index],
+                unavailableCharIndexes: [...new Set([
+                    ...displayedWords[index].unavailableCharIndexes,
+                    intersectionProps.displayedCharIndex
+                ])]
+            }
+        }
+        
+        return word;
+    })
+};

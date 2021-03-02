@@ -1,6 +1,6 @@
 import Word from "../components/Word";
 import { CHAR_WIDTH, START_AXES_Y, START_AXES_X } from "../constants/constants";
-import { mapWordCharacters } from "./displayedWordHelpers";
+import { mapWordCharacters, updateUnavailableCharIndexes } from "./helpers";
 
 const generateCrossword = (words) => {
     let displayedWords = [];
@@ -55,22 +55,6 @@ const generateCrossword = (words) => {
         return false;
     };
 
-    const updateUnavailableCharIndexes = (intersectionProps, displayedWords) => {
-        return displayedWords.map((word, index) => {
-            if (index === intersectionProps.displayedWordIndex) {
-                return {
-                    ...displayedWords[index],
-                    unavailableCharIndexes: [...new Set([
-                        ...displayedWords[index].unavailableCharIndexes,
-                        intersectionProps.displayedCharIndex
-                    ])]
-                }
-            }
-            
-            return word;
-        })
-    };
-
     //DETERMINE THE NEXT X, Y AXES TO DISPLAY WORD
     const getDisplayProps = ({ displayedCharIndex, newCharIndex, notDisplayedWord }, displayedWord) => {
         //HANDLE NOT INTERSECTED WORD
@@ -114,9 +98,6 @@ const generateCrossword = (words) => {
     const getIntersectionProps = (word, displayedWords) => {
         let newCharIndex;
         let displayedCharIndex;
-
-        console.log(word)
-
         const displayedWordIndex = displayedWords
             .map(mapWordCharacters)
             .findIndex((charArray) => {
