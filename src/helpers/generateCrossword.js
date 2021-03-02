@@ -6,6 +6,8 @@ const generateCrossword = (words) => {
     let displayedWords = [];
 
     const willWordOverlap = (displayProps, displayedWords) => {
+        // ----------- FIX OVERLAPPING LOGIC ---------------
+
         console.log(displayProps)
         if (displayProps.noIntersection) {
             return false;
@@ -14,12 +16,11 @@ const generateCrossword = (words) => {
         const horizontalWords = displayedWords.filter((displayedWord) => !displayedWord.isVertical);
         const verticalWords = displayedWords.filter((displayedWord) => displayedWord.isVertical);
 
-        /* console.log("vertical", isVertical, 'v-', verticalWords, 'h-', horizontalWords)
-        console.log(displayProps) */
         if (displayProps.isVertical) {
             //overlapping with horizontal words
-            if (horizontalWords.some((word) => (word.startX <= displayProps.startX <= word.endX) && (displayProps.startY <= word.startY <= displayProps.endY))) {
-                console.log('VERTICAL OVERLAP')
+            const horizontalOverlapWord = horizontalWords.find((word) => (word.startX <= displayProps.startX <= word.endX) && (displayProps.startY <= word.startY <= displayProps.endY));
+            if (horizontalOverlapWord) {
+                console.log('VERTICAL OVERLAP', displayProps.word, '-->', horizontalOverlapWord);
                 return true;
             }
 
@@ -35,8 +36,9 @@ const generateCrossword = (words) => {
 
         if (!displayProps.isVertical) {
             //overlapping with vertical words
-            if (verticalWords.some((word) => (word.startY <= displayProps.startY <= word.endY) && (displayProps.startX <= word.startX <= displayProps.endX))) {
-                console.log('HORIZONTAL OVERLAP')
+            const verticalOverlapWord = verticalWords.find((word) => (word.startY <= displayProps.startY <= word.endY) && (displayProps.startX <= word.startX <= displayProps.endX));
+            if (verticalOverlapWord) {
+                console.log('HORIZONTAL OVERLAP', displayProps.word, '-->', verticalOverlapWord)
                 return true;
             }
 
@@ -53,13 +55,13 @@ const generateCrossword = (words) => {
         return false;
     };
 
-    const updateUnavailableCharIndexes = (intersectionProps, words) => {
-        return words.map((word, index) => {
+    const updateUnavailableCharIndexes = (intersectionProps, displayedWords) => {
+        return displayedWords.map((word, index) => {
             if (index === intersectionProps.displayedWordIndex) {
                 return {
-                    ...words[index],
+                    ...displayedWords[index],
                     unavailableCharIndexes: [...new Set([
-                        ...words[index].unavailableCharIndexes,
+                        ...displayedWords[index].unavailableCharIndexes,
                         intersectionProps.displayedCharIndex
                     ])]
                 }
@@ -100,6 +102,7 @@ const generateCrossword = (words) => {
 
         const Y = displayedWord.startY - newCharIndexPixels;
         return {
+            word: notDisplayedWord,
             isVertical: true,
             startY: Y,
             startX: displayedWord.startX + oldCharIndexPixels,
@@ -108,28 +111,13 @@ const generateCrossword = (words) => {
     };
 
     //FIND THE INDEX OF THE WORD TO INTERSECT ---> FIND THE INDEXES OF CHARACTERS THAT INTERSECT
-    const getIntersectionProps = (word, unavailableWords=[]) => {
+    const getIntersectionProps = (word, displayedWords) => {
         let newCharIndex;
         let displayedCharIndex;
 
         console.log(word)
-        console.log('filtered', displayedWords
-        .map((displayedWord) => {
-            if(unavailableWords.some((word) => word.word === displayedWord.word)) {
-                return null;
-            }
-
-            return displayedWord;
-        }))
 
         const displayedWordIndex = displayedWords
-            .map((displayedWord) => {
-                if(unavailableWords.some((word) => word.word === displayedWord.word)) {
-                    return null;
-                }
-
-                return displayedWord;
-            })
             .map(mapWordCharacters)
             .findIndex((charArray) => {
                 console.log(charArray)
@@ -157,18 +145,32 @@ const generateCrossword = (words) => {
         //CHECK IF WORD WILL OVERLAP
         console.log('WORD CHECKED:', word, 'TO LINK:', displayedWords[intersectionProps.displayedWordIndex])
 
-        const wordsToCheck = displayedWords.filter((displayedWord) => displayedWord.word !== displayedWords[intersectionProps.displayedWordIndex]?.word);
-        console.log('to check', wordsToCheck)
-
-        if (willWordOverlap(getDisplayProps(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]), wordsToCheck)) {
-            console.log('overlapped')
-            unavailableWords = [...unavailableWords, displayedWords[intersectionProps.displayedWordIndex]];
-            getIntersectionProps(word, unavailableWords);
-        };
-
         console.log('final', intersectionProps)
         return intersectionProps;
     };
+
+    const registerDisplayedAndReturnFinalDisplayProps = (word) => {
+        const intersectionProps = getIntersectionProps(word, displayedWords);
+        console.log(intersectionProps, 'props')
+        const displayProps = getDisplayProps(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]);
+
+
+        const wordsToCheckForOverlap = displayedWords
+            .filter((displayedWord) => displayedWord.word !== displayedWords[intersectionProps.displayedWordIndex]?.word);
+
+        console.log(wordsToCheckForOverlap)
+        if (willWordOverlap(displayProps, wordsToCheckForOverlap)) {
+            console.log('overlap')
+        }
+
+        displayedWords = [...updateUnavailableCharIndexes(intersectionProps, displayedWords), {
+            word: word,
+            unavailableCharIndexes: [intersectionProps.newCharIndex],
+            ...displayProps
+        }];
+
+        return displayProps;
+    }
 
     //MAP WORDS AND ADD DISPLAYED WORDS INTO SEPARATE ARRAY
     const mapWordsOntoCrosswords = (word, index) => {
@@ -196,15 +198,7 @@ const generateCrossword = (words) => {
         }
 
         //DETERMINE INTERSECTION + DISPLAY PROPS FOR NEXT ITEMS
-        const intersectionProps = getIntersectionProps(word);
-        console.log(intersectionProps, 'props')
-        const displayProps = getDisplayProps(intersectionProps, displayedWords[intersectionProps.displayedWordIndex]);
-
-        displayedWords = [...updateUnavailableCharIndexes(intersectionProps, displayedWords), {
-            word: word,
-            unavailableCharIndexes: [intersectionProps.newCharIndex],
-            ...displayProps
-        }];
+        const displayProps = registerDisplayedAndReturnFinalDisplayProps(word);
 
         return (
             <Word
