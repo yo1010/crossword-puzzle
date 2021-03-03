@@ -6,7 +6,7 @@ const generateCrossword = (words) => {
     let displayedWords = [];
 
     const willWordOverlap = (displayProps, displayedWords) => {
-        // ----------- FIX OVERLAPPING LOGIC ---------------
+        // ----------- FIX OVERLAPPING LOGIC FOR SAME ORIENTATION ITEMS ---------------
 
         console.log(displayProps)
         if (displayProps.noIntersection) {
