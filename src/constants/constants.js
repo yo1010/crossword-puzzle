@@ -1,4 +1,4 @@
-export const WORDS = ['hello', 'mouse', 'country', 'octopus', 'pie', 'school', 'zero', 'america', 'jjj', 'commander'];
+export const WORDS = ['hello', 'mouse', 'country', 'octopus', 'pie', 'school', 'zero', 'america', 'jjj', 'commander', 'fresh', 'entire', 'party', 'jazz', 'human', 'husband', 'episode'];
 
 export const CHAR_WIDTH = 20;
 

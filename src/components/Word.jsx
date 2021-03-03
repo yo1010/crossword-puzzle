@@ -13,7 +13,7 @@ const Word = ({ word, startY=0, startX=0, isVertical, noLink=false }) => {
         {"char-no-link": noLink}
     );
     return (
-        <div className={WordStyles} style={{ position: 'absolute', top: startY, left: startX  }}>
+        <div className={WordStyles} style={{ position: 'absolute', top: startY, left: startX }}>
             {word.split('').map((char) => (
                 <div className={charStyles}>
                     {char}
