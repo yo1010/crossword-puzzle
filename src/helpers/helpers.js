@@ -1,9 +1,9 @@
-export const mapWordCharacters = (displayedWord) => {
+export const mapAvailableCharactersOfWord = (displayedWord) => {
     //if word is unavailable
     if (!displayedWord) {
         return [];
     }
-    
+
     //MAP displayedWords AND HANDLE ALREADY INTERSECTED CHARACTERS
     const { unavailableCharIndexes, word } = displayedWord;
     if (unavailableCharIndexes.length > 0) {
@@ -18,7 +18,7 @@ export const mapWordCharacters = (displayedWord) => {
         return availableChars;
     }
 
-    return [...word]
+    return [...word];
 };
 
 export const updateUnavailableCharIndexes = (intersectionProps, displayedWords) => {
@@ -32,7 +32,7 @@ export const updateUnavailableCharIndexes = (intersectionProps, displayedWords) 
                 ])]
             }
         }
-        
+
         return word;
     })
 };
