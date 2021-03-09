@@ -227,7 +227,9 @@ const generateCrossword = (words) => {
         console.log('new props')
 
         //SIDE EFFECT - REGISTER DISPLAYED WORDS
-        registerDisplayedWords(word, props.intersectionProps, props.displayProps);
+        if (!props.displayProps.noIntersection) {
+            registerDisplayedWords(word, props.intersectionProps, props.displayProps);
+        }
 
         return (
             <Word

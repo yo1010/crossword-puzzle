@@ -1,4 +1,4 @@
-export const WORDS = ['hello', 'mouse', 'country', 'octopus', 'pie', 'school', 'zero', 'america', 'jjj', 'commander', 'fresh', 'entire', 'party', 'jazz', 'human', 'husband', 'episode', 'more', 'blues', 'samba', 'mathematics', 'computers', 'science', 'principles', 'chair', 'table', 'water', 'back'];
+export const WORDS = ['hello', 'mouse', 'country', 'octopus', 'pie', 'school', 'zero', 'america', 'jjj', 'commander', 'fresh', 'entire', 'party', 'jazz', 'human', 'husband', 'episode', 'more', 'blues', 'samba', 'mathematics', 'computers', 'science', 'principles', 'chair', 'table', 'water', 'back', 'front', 'singer', 'musician', 'travel', 'play', 'morals', 'friends'];
 
 export const CHAR_WIDTH = 20;
 
