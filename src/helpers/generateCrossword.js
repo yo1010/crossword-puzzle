@@ -145,7 +145,6 @@ const generateCrossword = (words) => {
     };
 
     const registerDisplayedWords = (word, intersectionProps, displayProps) => {
-        console.log('registered')
         displayedWords = [...updateUnavailableCharIndexes(intersectionProps, displayedWords), {
             word: word,
             unavailableCharIndexes: [intersectionProps.newCharIndex],
