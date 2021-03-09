@@ -28,7 +28,7 @@ const App = () => {
       {!isGenerated && 
         <div style={{ width: 'fit-content', margin: 'auto' }}>
           {WORDS.map((word, index) => (
-            <Word word={word} isVertical={false} startY={index * CHAR_WIDTH} />
+            <Word word={word} isVertical={false} startY={index * CHAR_WIDTH} index={99 + index}/>
           ))}
         </div>
       }
