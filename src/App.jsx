@@ -5,12 +5,6 @@ import generateCrossword from './helpers/generateCrossword';
 
 import './App.css';
 
-//NEED TO ADD INPUT FOR WORDS
-
-//NEED TO HANDLE WORDS THAT DON'T LINK
-
-//NEED TO HANDLE OVERLAPPING
-
 const App = () => {
   const [isGenerated, toggleCrossword] = useState(false);
 
