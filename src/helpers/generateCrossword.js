@@ -7,6 +7,7 @@ const generateCrossword = (words) => {
 
     const shouldNotDisplay = (displayProps, displayedWords) => {
         // ----------- FIX OVERLAPPING LOGIC FOR SAME ORIENTATION ITEMS ---------------
+        //CHANGE HORIZONTAL CHECKER TO USE SOME INSTEAD OF FIND TO BE CONSISTENT WITH OTHER PARTS OF THE CODE
 
         //NO AVAILABLE INTERSECTION
         if (displayProps.noIntersection) {
