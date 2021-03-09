@@ -3,6 +3,7 @@ import { CHAR_WIDTH, START_AXES_Y, START_AXES_X } from "../constants/constants";
 import { mapWordCharacters, updateUnavailableCharIndexes } from "./helpers";
 
 const generateCrossword = (words) => {
+    //Convert this to a set to optimize and make faster
     let displayedWords = [];
 
     const shouldNotDisplay = (displayProps, displayedWords) => {
